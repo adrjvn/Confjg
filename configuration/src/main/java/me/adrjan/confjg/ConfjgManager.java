@@ -41,7 +41,7 @@ public class ConfjgManager {
 
     public static class Builder {
 
-        private static GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls().setPrettyPrinting()
+        public final GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls().setPrettyPrinting()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 
         public <T> Builder addGsonAdapter(Type type, GsonSerializerAdapter<T> adapter) {
@@ -49,7 +49,7 @@ public class ConfjgManager {
             return this;
         }
 
-        public static ConfjgManager build() {
+        public ConfjgManager build() {
             return new ConfjgManager(gsonBuilder.create());
         }
     }
