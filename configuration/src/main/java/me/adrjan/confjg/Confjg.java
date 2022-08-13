@@ -22,7 +22,7 @@ public abstract class Confjg {
     @SneakyThrows
     public Confjg() {
         this.confjgInfo = getClass().getAnnotation(ConfjgInfo.class);
-        this.file = new File(confjgInfo.path() + "\\" + confjgInfo.name() + ".yml");
+        this.file = new File(ConfjgManager.PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
     }
 
     @SneakyThrows
@@ -35,7 +35,7 @@ public abstract class Confjg {
 
     @SneakyThrows
     public void reload() { //XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-        this.file = new File(confjgInfo.path() + "\\" + confjgInfo.name() + ".yml");
+        this.file = new File(ConfjgManager.PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
         Field[] fields = getClass().getDeclaredFields();
         Confjg instance = this.gson.fromJson(new BufferedReader(new FileReader(file)), getClass());
         Field[] newFields = instance.getClass().getDeclaredFields();

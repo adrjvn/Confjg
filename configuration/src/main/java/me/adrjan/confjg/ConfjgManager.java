@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.util.function.Consumer;
 
 @AllArgsConstructor
 public class ConfjgManager {
 
     private final Gson gson;
+    public static final String PATH_PATTERN = "%s\\%s.yml";
 
     public <T> T registerConfjg(Class<T> type) throws Exception {
         if (!type.isAnnotationPresent(ConfjgInfo.class))
@@ -22,7 +24,7 @@ public class ConfjgManager {
         ConfjgInfo confjgInfo = type.getAnnotation(ConfjgInfo.class);
 
         File dir = new File(confjgInfo.path());
-        File file = new File(dir.getPath() + "\\" + confjgInfo.name() + ".yml");
+        File file = new File(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
 
         if (!file.exists()) {
             dir.mkdirs();
@@ -39,6 +41,12 @@ public class ConfjgManager {
         return instance;
     }
 
+    public <T> T registerConfjg(Class<T> type, boolean updateOnStartup) throws Exception {
+        T instance = this.registerConfjg(type);
+        if (updateOnStartup) ((Confjg) instance).save();
+        return instance;
+    }
+
     public static class Builder {
 
         public final GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls().setPrettyPrinting()
@@ -46,6 +54,11 @@ public class ConfjgManager {
 
         public <T> Builder addGsonAdapter(Type type, GsonSerializerAdapter<T> adapter) {
             gsonBuilder.registerTypeAdapter(type, adapter);
+            return this;
+        }
+
+        public Builder extra(Consumer<GsonBuilder> consumer){
+            consumer.accept(gsonBuilder);
             return this;
         }
 
