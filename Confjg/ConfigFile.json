@@ -1,0 +1,19 @@
+{
+  "str": "ssssss",
+  "integer_test": 2222,
+  "list": [
+    "test",
+    "dasfgsdgsd",
+    "saddd"
+  ],
+  "objects": [
+    {
+      "name": "test",
+      "age": 22
+    },
+    {
+      "name": "oo",
+      "age": 1337
+    }
+  ]
+}

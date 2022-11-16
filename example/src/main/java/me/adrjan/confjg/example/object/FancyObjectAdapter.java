@@ -1,7 +1,7 @@
 package me.adrjan.confjg.example.object;
 
 import com.google.gson.*;
-import me.adrjan.confjg.GsonSerializerAdapter;
+import me.adrjan.confjg.serializer.GsonSerializerAdapter;
 
 import java.lang.reflect.Type;
 

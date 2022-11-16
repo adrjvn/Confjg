@@ -1,4 +1,4 @@
-package me.adrjan.confjg;
+package me.adrjan.confjg.serializer;
 
 import com.google.gson.*;
 

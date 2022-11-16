@@ -1,4 +1,4 @@
-package me.adrjan.confjg;
+package me.adrjan.confjg.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,5 +11,9 @@ public @interface ConfjgInfo {
 
     String name();
 
-    String path() default "";
+    String path() default ".";
+
+    String database() default "ConfjgDatabase";
+
+    String collection() default "Confjg";
 }

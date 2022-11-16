@@ -12,10 +12,13 @@ public class Example {
                 .build();
 
         TestConfig testConfig = confjgManager
-                .registerConfjg(TestConfig.class); //, true);
+                .registerConfjg(TestConfig.class, true);
 
         System.out.println(testConfig.getIntegerTest());
-        testConfig.reload();
+
+        testConfig.setIntegerTest(2222);
         testConfig.save();
+        testConfig.reload();
+        System.out.println(testConfig.getIntegerTest());
     }
 }
