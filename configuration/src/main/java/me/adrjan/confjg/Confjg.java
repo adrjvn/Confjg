@@ -15,13 +15,7 @@ public abstract class Confjg extends ConfjgWrapper {
     @Setter
     transient private Gson gson;
     transient private File file;
-    final transient private ConfjgInfo confjgInfo;
-
-    @SneakyThrows
-    public Confjg() {
-        this.confjgInfo = getClass().getAnnotation(ConfjgInfo.class);
-        this.file = new File(ConfjgManager.PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
-    }
+    final transient private ConfjgInfo confjgInfo = getClass().getAnnotation(ConfjgInfo.class);
 
     @SneakyThrows
     @Override
@@ -36,5 +30,13 @@ public abstract class Confjg extends ConfjgWrapper {
     @Override
     protected Confjg instance() {
         return this.gson.fromJson(new BufferedReader(new FileReader(file)), getClass());
+    }
+
+    public void setDataFile(File file) {
+        if (file == null) {
+            this.file = new File(ConfjgManager.PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
+            return;
+        }
+        this.file = new File(confjgInfo.path(), confjgInfo.name() + ConfjgManager.EXTENSION);
     }
 }

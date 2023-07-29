@@ -21,7 +21,9 @@ public class ConfjgManager {
 
     private final Gson gson;
     private final MongoClient mongoClient;
-    public static final String PATH_PATTERN = "%s\\%s.json";
+    private final File dataFile;
+    public static final String EXTENSION = ".json";
+    public static final String PATH_PATTERN = "%s\\%s" + EXTENSION;
 
     public <T extends IConfjg> T registerConfjg(Class<T> type) throws Exception {
         if (!type.isAnnotationPresent(ConfjgInfo.class))
@@ -31,8 +33,10 @@ public class ConfjgManager {
         T instance = null;
 
         if (Confjg.class.isAssignableFrom(type)) {
-            File dir = new File(confjgInfo.path());
-            File file = new File(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
+            File dir = this.dataFile == null ? new File(confjgInfo.path())
+                    : this.dataFile;
+            File file = this.dataFile == null ? new File(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()))
+                    : new File(this.dataFile, confjgInfo.name() + EXTENSION);
 
             if (!file.exists()) {
                 dir.mkdirs();
@@ -46,6 +50,7 @@ public class ConfjgManager {
 
             instance = this.gson.fromJson(new BufferedReader(new FileReader(file)), type);
             instance.getClass().getMethod("setGson", Gson.class).invoke(instance, this.gson);
+            instance.getClass().getMethod("setDataFile", File.class).invoke(instance, this.dataFile);
         } else if (MongoConfjg.class.isAssignableFrom(type) && this.mongoClient != null) {
             instance = type.newInstance();
             instance.getClass().getMethod("setGson", Gson.class).invoke(instance, this.gson);
@@ -64,10 +69,12 @@ public class ConfjgManager {
 
     public static class Builder {
 
-        public final GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls().setPrettyPrinting()
+        private final GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls().setPrettyPrinting()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 
-        public MongoClient mongoClient = null;
+        private MongoClient mongoClient = null;
+
+        private File dataFile = null;
 
         public <T> Builder addGsonAdapter(Type type, GsonSerializerAdapter<T> adapter) {
             gsonBuilder.registerTypeAdapter(type, adapter);
@@ -79,13 +86,18 @@ public class ConfjgManager {
             return this;
         }
 
+        public Builder dataFile(File dataFile) {
+            this.dataFile = dataFile;
+            return this;
+        }
+
         public Builder extra(Consumer<GsonBuilder> consumer) {
             consumer.accept(gsonBuilder);
             return this;
         }
 
         public ConfjgManager build() {
-            return new ConfjgManager(gsonBuilder.create(), this.mongoClient);
+            return new ConfjgManager(gsonBuilder.create(), this.mongoClient, this.dataFile);
         }
     }
 }
