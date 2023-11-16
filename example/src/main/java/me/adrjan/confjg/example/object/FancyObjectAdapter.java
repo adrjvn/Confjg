@@ -1,11 +1,11 @@
 package me.adrjan.confjg.example.object;
 
 import com.google.gson.*;
-import me.adrjan.confjg.serializer.GsonSerializerAdapter;
+import me.adrjan.confjg.serializer.GsonSerializationAdapter;
 
 import java.lang.reflect.Type;
 
-public class FancyObjectAdapter extends GsonSerializerAdapter<FancyObject> {
+public class FancyObjectAdapter extends GsonSerializationAdapter<FancyObject> {
 
     @Override
     public FancyObject deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {

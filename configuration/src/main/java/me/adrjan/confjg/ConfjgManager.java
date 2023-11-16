@@ -7,7 +7,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import lombok.AllArgsConstructor;
 import me.adrjan.confjg.annotation.ConfjgInfo;
-import me.adrjan.confjg.serializer.GsonSerializerAdapter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,15 +68,27 @@ public class ConfjgManager {
 
     public static class Builder {
 
-        private final GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls().setPrettyPrinting()
+        private GsonBuilder gsonBuilder = new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 
         private MongoClient mongoClient = null;
 
         private File dataFile = null;
 
-        public <T> Builder addGsonAdapter(Type type, GsonSerializerAdapter<T> adapter) {
-            gsonBuilder.registerTypeAdapter(type, adapter);
+        public Builder fromGson(Gson gsonProvider) {
+            this.gsonBuilder = gsonProvider.newBuilder();
+            return this;
+        }
+
+        public Builder addGsonAdapter(Type type, Object typeAdapter) {
+            gsonBuilder.registerTypeAdapter(type, typeAdapter);
+            return this;
+        }
+
+        public Builder addGsonHierarchyAdapter(Type type, Object typeAdapter) {
+            gsonBuilder.registerTypeHierarchyAdapter(type.getClass(), typeAdapter);
             return this;
         }
 

@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public abstract class GsonSerializerAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
+public abstract class GsonSerializationAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 
     @Override
     public abstract T deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext);
