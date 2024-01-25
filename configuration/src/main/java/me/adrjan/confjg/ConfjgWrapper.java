@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ConfjgWrapper implements IConfjg {
 
@@ -12,6 +13,11 @@ public abstract class ConfjgWrapper implements IConfjg {
     public void save() {
         this.saveConfig();
         //announce
+    }
+
+    @Override
+    public CompletableFuture<Void> saveAsync() {
+        return CompletableFuture.runAsync(this::save);
     }
 
     @SneakyThrows

@@ -18,7 +18,11 @@ public class Example {
 
         testConfig.setIntegerTest(2222);
         testConfig.save();
+
         testConfig.reload();
         System.out.println(testConfig.getIntegerTest());
+
+        testConfig.setIntegerTest(1111);
+        testConfig.saveAsync().thenAccept(v -> System.out.println(testConfig.getIntegerTest()));
     }
 }
