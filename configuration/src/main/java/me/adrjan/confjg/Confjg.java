@@ -20,10 +20,10 @@ public abstract class Confjg extends ConfjgWrapper {
     @SneakyThrows
     @Override
     protected void saveConfig() {
-        FileWriter fileWriter = new FileWriter(this.file);
-        fileWriter.write(this.gson.toJson(this));
-        fileWriter.flush();
-        fileWriter.close();
+        try (FileWriter fileWriter = new FileWriter(this.file)){
+            fileWriter.write(this.gson.toJson(this));
+            fileWriter.flush();
+        }
     }
 
     @SneakyThrows

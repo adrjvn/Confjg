@@ -40,11 +40,11 @@ public class ConfjgManager {
             if (!file.exists()) {
                 dir.mkdirs();
                 file.createNewFile();
-                FileWriter fileWriter = new FileWriter(file);
-                T createInstantion = type.newInstance();
-                fileWriter.write(this.gson.toJson(createInstantion));
-                fileWriter.flush();
-                fileWriter.close();
+                try (FileWriter fileWriter = new FileWriter(file)){
+                    T createInstantion = type.newInstance();
+                    fileWriter.write(this.gson.toJson(createInstantion));
+                    fileWriter.flush();
+                }
             }
 
             instance = this.gson.fromJson(new BufferedReader(new FileReader(file)), type);
