@@ -22,7 +22,7 @@ public class ConfjgManager {
     private final MongoClient mongoClient;
     private final File dataFile;
     public static final String EXTENSION = ".json";
-    public static final String PATH_PATTERN = "%s\\%s" + EXTENSION;
+    public static final String PATH_PATTERN =  "%s" + File.separator + "%s" + EXTENSION;
 
     public <T extends IConfjg> T registerConfjg(Class<T> type) throws Exception {
         if (!type.isAnnotationPresent(ConfjgInfo.class))
@@ -37,10 +37,11 @@ public class ConfjgManager {
             File file = this.dataFile == null ? new File(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()))
                     : new File(this.dataFile, confjgInfo.name() + EXTENSION);
 
+            System.out.println(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
             if (!file.exists()) {
                 dir.mkdirs();
                 file.createNewFile();
-                try (FileWriter fileWriter = new FileWriter(file)){
+                try (FileWriter fileWriter = new FileWriter(file)) {
                     T createInstantion = type.newInstance();
                     fileWriter.write(this.gson.toJson(createInstantion));
                     fileWriter.flush();
