@@ -36,8 +36,6 @@ public class ConfjgManager {
                     : this.dataFile;
             File file = this.dataFile == null ? new File(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()))
                     : new File(this.dataFile, confjgInfo.name() + EXTENSION);
-
-            System.out.println(PATH_PATTERN.formatted(confjgInfo.path(), confjgInfo.name()));
             if (!file.exists()) {
                 dir.mkdirs();
                 file.createNewFile();
