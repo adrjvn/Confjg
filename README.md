@@ -86,9 +86,6 @@ Po pierwszym uruchomieniu tego kodu, w katalogu głównym Twojej aplikacji zosta
 W przypadku konfiguracji opartej na MongoDB, rozszerzyłbyś `MongoConfjg` (nie pokazano tutaj, ale zasada jest podobna) i zarejestrował `MongoClient` za pomocą `ConfjgManager.Builder`.
 
 ```java
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-
 // ... wewnątrz metody main lub konfiguracji
 MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
 
